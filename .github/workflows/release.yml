@@ -1,0 +1,61 @@
+name: Auto-release on PR merge
+
+on:
+  pull_request_target:
+    branches:
+      - master
+    types:
+      - closed
+
+jobs:
+  auto-release:
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.merged == true && contains(github.event.pull_request.labels.*.name, 'release')
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Configure Git
+        run: |
+          git config --global user.name "DataLad Bot"
+          git config --global user.email "bot@datalad.org"
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '^3.8'
+
+      - name: Install Python dependencies
+        run: python -m pip install build requests scriv twine
+
+      - name: Create release
+        run: |
+          set -x
+          new_version="$(git tag --merged HEAD --sort v:refname | perl -nle 'print "$1.$2.", $3+1 if /^(\d+)\.(\d+)\.(\d+)$/' | tail -n1)"
+          echo "[INFO] New version: $new_version"
+
+          shopt -s nullglob
+          python3 tools/ci/release-comment.py \
+            ${{ github.repository_owner }} \
+            ${{ github.event.repository.name }} \
+            "$new_version" \
+            changelog.d/pr-*
+
+          scriv collect --add --version "$new_version"
+          #make update-changelog
+          #git add docs/source/changelog.rst
+          git commit -m '[skip ci] Update CHANGELOG'
+          git tag "$new_version"
+          git push
+          git push --tags
+          scriv github-release
+          python -m build
+          twine upload dist/*
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TWINE_USERNAME: __token__
+          TWINE_PASSWORD: ${{ secrets.PYPI_TOKEN }}
+
+# vim:set sts=2:

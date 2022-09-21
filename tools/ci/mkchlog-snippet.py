@@ -24,14 +24,14 @@ import requests
 
 SEMVER_LABELS = [
     # (Label name, category name) in descending order of precedence
-    ("semver-major", "Breaking Changes"),
-    ("semver-minor", "Enhancements and New Features"),
-    ("semver-patch", "Bug Fixes"),
-    ("semver-dependencies", "Dependencies"),
-    ("semver-documentation", "Documentation"),
-    ("semver-internal", "Internal"),
-    ("semver-performance", "Performance"),
-    ("semver-tests", "Tests"),
+    ("semver-major", "\U0001F4A5 Breaking Changes"),
+    ("semver-minor", "\U0001F680 Enhancements and New Features"),
+    ("semver-patch", "\U0001F41B Bug Fixes"),
+    ("semver-dependencies", "\U0001F529 Dependencies"),
+    ("semver-documentation", "\U0001F4DD Documentation"),
+    ("semver-internal", "\U0001F3E0 Internal"),
+    ("semver-performance", "\U0001F3CE Performance"),
+    ("semver-tests", "\U0001F9EA Tests"),
 ]
 
 GRAPHQL_API_URL = os.environ.get("GITHUB_GRAPHQL_URL", "https://api.github.com/graphql")

@@ -17,7 +17,6 @@ import argparse
 import json
 import os
 import sys
-import textwrap
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -54,21 +53,13 @@ class PullRequest:
         sys.exit("Pull request lacks semver labels")
 
     def as_snippet(self) -> str:
-        item = self.title
+        item = f"- {self.title}"
         if not item.endswith((".", "!", "?")):
             item += "."
         if self.closed_issues:
             item += f"  Fixes {', '.join(self.closed_issues)} via {self.url} (by @{self.author})"
         else:
             item += f"  {self.url} (by @{self.author})"
-        item = textwrap.fill(
-            item,
-            width=79,
-            initial_indent="- ",
-            subsequent_indent="  ",
-            break_long_words=False,
-            break_on_hyphens=False,
-        )
         return f"### {self.category}\n\n{item}\n"
 
 

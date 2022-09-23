@@ -47,7 +47,7 @@ jobs:
           #make update-changelog
           #git add docs/source/changelog.rst
           git commit -m '[skip ci] Update CHANGELOG'
-          git tag "$new_version"
+          git tag -m "Update version to $new_version" "$new_version"
           git push
           git push --tags
           scriv github-release

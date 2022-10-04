@@ -18,7 +18,7 @@ jobs:
           fetch-depth: 0
 
       - name: Prepare release
-        uses: datalad/release-action/release@master
+        uses: datalad/release-action/release@init
         with:
           pre-tag: |
             echo 'This is the pre-tag step.'

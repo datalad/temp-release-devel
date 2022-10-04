@@ -26,5 +26,7 @@ jobs:
 
       - name: Add changelog snippet
         uses: datalad/release-action/add-changelog-snippet@init
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
 
 # vim:set et sts=2:

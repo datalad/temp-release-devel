@@ -1,0 +1,11 @@
+name: Dump context
+
+on:
+  - pull_request
+
+jobs:
+  dump:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Dump github context
+        run: printf '%s' "${{ toJSON(github) }}" | jq .
